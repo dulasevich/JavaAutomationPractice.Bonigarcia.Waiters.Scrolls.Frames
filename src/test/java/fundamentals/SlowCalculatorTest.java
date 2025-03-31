@@ -48,6 +48,7 @@ public class SlowCalculatorTest {
                 .until(ExpectedConditions.invisibilityOf(driver.findElement(By.xpath("//span[@id = 'spinner']"))));
         WebElement resultRow = driver.findElement(By.xpath("//div[@class='screen']"));
         Assertions.assertEquals(result, resultRow.getText(), "Result is incorrect");
+
         driver.findElement(By.xpath("//div[@class='top']/span")).click();
         Assertions.assertEquals("", resultRow.getText(), "Result is NOT cleared");
     }

@@ -58,8 +58,7 @@ public class WebStorageTest {
                         "Session storage set in browser is wrong"),
                 () -> Assertions.assertEquals("{}", driver.findElement(LOCAL_STORAGE_LOCATOR).getText(),
                         "Local storage displayed is incorrect"),
-                () -> Assertions.assertEquals("{\"lastname\":\"Doe\",\"name\":\"John\"}", driver.findElement(SESSION_STORAGE_LOCATOR).getText(),
-                        "Web storage displayed is incorrect")
+                () -> Assertions.assertEquals("{\"lastname\":\"Doe\",\"name\":\"John\"}", driver.findElement(SESSION_STORAGE_LOCATOR).getText())
         );
     }
 
