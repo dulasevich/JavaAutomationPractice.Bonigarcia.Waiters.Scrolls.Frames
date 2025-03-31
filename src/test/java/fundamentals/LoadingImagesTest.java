@@ -40,6 +40,7 @@ public class LoadingImagesTest {
                 () -> Assertions.assertTrue(driver.findElement(By.xpath("//span[@id='spinner']")).isDisplayed(),
                         "Loading spinner is not displayed")
         );
+
         new WebDriverWait(driver, Duration.ofSeconds(15))
                 .until(ExpectedConditions.textToBe(result, "Done!"));
         List.of(By.xpath("//img[@id='compass']"), By.xpath("//img[@id='calendar']"),

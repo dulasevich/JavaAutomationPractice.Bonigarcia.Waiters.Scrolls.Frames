@@ -57,6 +57,7 @@ public class DialogBoxesTest {
         Assertions.assertEquals("Is this correct?", alert.getText(), "Incorrect alert text");
         alert.accept();
         Assertions.assertEquals("You chose: true", driver.findElement(By.xpath(String.format(ALERT_RESULTS_XPATH, button))).getText());
+
         clickLaunchButton(button, false);
         driver.switchTo().alert().dismiss();
         Assertions.assertEquals("You chose: false", driver.findElement(By.xpath(String.format(ALERT_RESULTS_XPATH, button))).getText());
@@ -70,11 +71,13 @@ public class DialogBoxesTest {
         Assertions.assertEquals("Please enter your name", alert.getText(), "Incorrect alert text");
         alert.accept();
         Assertions.assertEquals("You typed:", driver.findElement(By.xpath(String.format(ALERT_RESULTS_XPATH, button))).getText());
+
         clickLaunchButton(button, false);
         String nameToEnter = "NAME";
         alert.sendKeys(nameToEnter);
         alert.accept();
         Assertions.assertEquals("You typed: " + nameToEnter, driver.findElement(By.xpath(String.format(ALERT_RESULTS_XPATH, button))).getText());
+
         clickLaunchButton(button, false);
         driver.switchTo().alert().dismiss();
         Assertions.assertEquals("You typed: null", driver.findElement(By.xpath(String.format(ALERT_RESULTS_XPATH, button))).getText());
@@ -94,6 +97,7 @@ public class DialogBoxesTest {
         driver.findElement(By.xpath("//button[contains(@class, 'secondary')]")).click();
         Assertions.assertEquals("You chose: Close", driver.findElement(By.xpath(String.format(ALERT_RESULTS_XPATH, button))).getText(),
                 "Selection is wrong");
+
         clickLaunchButton(button, true);
         driver.findElement(By.xpath("//button[contains(@class, 'btn-primary')]")).click();
         Assertions.assertEquals("You chose: Save changes", driver.findElement(By.xpath(String.format(ALERT_RESULTS_XPATH, button))).getText(),
