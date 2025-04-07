@@ -1,8 +1,8 @@
 package browser.agnostic;
 
-import org.junit.jupiter.api.AfterEach;
+import configs.TestPropertiesConfig;
+import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -15,30 +15,20 @@ import java.time.Duration;
 
 public class InfiniteScrollTest {
 
-    private static final String BASE_URL = "https://bonigarcia.dev/selenium-webdriver-java";
-    private WebDriver driver;
-
-    @BeforeEach
-    void setUp() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get(BASE_URL + "/index.html");
-    }
-
-    @AfterEach
-    void tearDown() {
-        driver.quit();
-    }
-
     @Test
     void infiniteScrollTest() {
-        driver.navigate().to(BASE_URL + "/infinite-scroll.html");
+        WebDriver driver = new ChromeDriver();
+        TestPropertiesConfig config = ConfigFactory.create(TestPropertiesConfig.class, System.getProperties());
+        driver.manage().window().maximize();
+        driver.get(config.getBaseUrl());
+        driver.findElement(By.xpath("//a[@href='infinite-scroll.html']")).click();
+
         By paragraphLocator = By.xpath("//p");
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(config.getShortTimeout()));
         wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(paragraphLocator, 0));
         int scrollNumber = 3;
 
-        for (int i=0; i<scrollNumber; i++) {
+        for (int i = 0; i < scrollNumber; i++) {
             int paragraphSize = driver.findElements(paragraphLocator).size();
             JavascriptExecutor js = (JavascriptExecutor) driver;
             js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
@@ -46,5 +36,7 @@ public class InfiniteScrollTest {
                             .not(ExpectedConditions.numberOfElementsToBe(paragraphLocator, paragraphSize))),
                     "New paragraphs are no longer loading");
         }
+
+        driver.quit();
     }
 }

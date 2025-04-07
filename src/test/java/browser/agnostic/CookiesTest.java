@@ -1,5 +1,7 @@
 package browser.agnostic;
 
+import configs.TestPropertiesConfig;
+import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,20 +12,19 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.util.*;
 
 public class CookiesTest {
-
-    private static final String BASE_URL = "https://bonigarcia.dev/selenium-webdriver-java";
     private WebDriver driver;
+    private final TestPropertiesConfig config = ConfigFactory.create(TestPropertiesConfig.class, System.getProperties());
     private static final By DISPLAY_BUTTON_LOCATOR = By.xpath("//button");
     private static final By COOKIES_LIST_LOCATOR = By.xpath("//p[@id='cookies-list']");
-    private static final Cookie USERNAME_COOKIE = new Cookie("username" , "John Doe", null);
-    private static final Cookie DATE_COOKIE = new Cookie("date" , "10/07/2018", null);
+    private static final Cookie USERNAME_COOKIE = new Cookie("username", "John Doe", null);
+    private static final Cookie DATE_COOKIE = new Cookie("date", "10/07/2018", null);
 
     @BeforeEach
     void setUp() {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.get(BASE_URL + "/index.html");
-        driver.navigate().to(BASE_URL + "/cookies.html");
+        driver.get(config.getBaseUrl());
+        driver.findElement(By.xpath("//a[@href='cookies.html']")).click();
     }
 
     @AfterEach

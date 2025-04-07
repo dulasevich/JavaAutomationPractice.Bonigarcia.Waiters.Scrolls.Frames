@@ -1,5 +1,7 @@
 package browser.agnostic;
 
+import configs.TestPropertiesConfig;
+import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +19,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DialogBoxesTest {
-    private static final String BASE_URL = "https://bonigarcia.dev/selenium-webdriver-java/dialog-boxes.html";
     private WebDriver driver;
+    private final TestPropertiesConfig config = ConfigFactory.create(TestPropertiesConfig.class, System.getProperties());
     private static final String DIALOG_BOX_XPATH = "//button[@id='my-%s']";
     private static final String ALERT_RESULTS_XPATH = DIALOG_BOX_XPATH + "/following-sibling::p";
 
@@ -26,7 +28,8 @@ public class DialogBoxesTest {
     void setUp() {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.get(BASE_URL);
+        driver.get(config.getBaseUrl());
+        driver.findElement(By.xpath("//a[@href='dialog-boxes.html']")).click();
     }
 
     @AfterEach
@@ -107,7 +110,7 @@ public class DialogBoxesTest {
     private void clickLaunchButton(String button, Boolean isModal) {
         driver.findElement(By.xpath(String.format(DIALOG_BOX_XPATH, button))).click();
         if (isModal) {
-            new WebDriverWait(driver, Duration.ofSeconds(1)).until(ExpectedConditions
+            new WebDriverWait(driver, Duration.ofSeconds(config.getShortTimeout())).until(ExpectedConditions
                     .visibilityOf(driver.findElement(By.xpath("//div[@class='modal-content']"))));
         }
     }
