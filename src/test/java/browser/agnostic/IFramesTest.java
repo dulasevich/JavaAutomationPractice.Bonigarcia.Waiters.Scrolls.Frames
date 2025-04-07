@@ -1,5 +1,7 @@
 package browser.agnostic;
 
+import configs.TestPropertiesConfig;
+import org.aeonbits.owner.ConfigFactory;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -15,21 +17,25 @@ import java.io.IOException;
 import java.time.Duration;
 
 public class IFramesTest {
-
-    private static final String BASE_URL = "https://bonigarcia.dev/selenium-webdriver-java/index.html";
     private WebDriver driver;
+    private final TestPropertiesConfig config = ConfigFactory.create(TestPropertiesConfig.class, System.getProperties());
 
     @BeforeEach
     void setUp() {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.get(BASE_URL);
+        driver.get(config.getBaseUrl());
         driver.findElement(By.xpath("//a[@href='iframes.html']")).click();
     }
 
     @AfterEach
     void tearDown() {
         driver.quit();
+    }
+
+    @Test
+    void iFramesNegativeTest() {
+        Assertions.assertThrows(NoSuchElementException.class, () -> driver.findElement(By.xpath("//p")));
     }
 
     @Test
@@ -40,7 +46,7 @@ public class IFramesTest {
         driver.switchTo().frame(driver.findElement(By.xpath("//iframe")));
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-        Boolean isPageScrolledToBottom = (Boolean) new WebDriverWait(driver, Duration.ofSeconds(2)).until(ExpectedConditions
+        Boolean isPageScrolledToBottom = (Boolean) new WebDriverWait(driver, Duration.ofSeconds(config.getShortTimeout())).until(ExpectedConditions
                 .jsReturnsValue("return window.scrollY + window.innerHeight >= document.body.scrollHeight;"));
         File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         FileUtils.copyFile(scrFile, new File("src/test/resources/image.png"));

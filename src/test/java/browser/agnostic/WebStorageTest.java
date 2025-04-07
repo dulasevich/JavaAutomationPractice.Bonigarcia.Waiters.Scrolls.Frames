@@ -1,5 +1,7 @@
 package browser.agnostic;
 
+import configs.TestPropertiesConfig;
+import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,9 +15,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class WebStorageTest {
-
-    private static final String BASE_URL = "https://bonigarcia.dev/selenium-webdriver-java";
     private WebDriver driver;
+    TestPropertiesConfig config = ConfigFactory.create(TestPropertiesConfig.class, System.getProperties());
     private static final By LOCAL_STORAGE_LOCATOR = By.xpath("//p[@id='local-storage']");
     private static final By SESSION_STORAGE_LOCATOR = By.xpath("//p[@id='session-storage']");
 
@@ -23,8 +24,8 @@ public class WebStorageTest {
     void setUp() {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.get(BASE_URL + "/index.html");
-        driver.navigate().to(BASE_URL + "/web-storage.html");
+        driver.get(config.getBaseUrl());
+        driver.findElement(By.xpath("//a[@href='web-storage.html']")).click();
     }
 
     @AfterEach

@@ -14,8 +14,11 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.29.0'
     testImplementation 'commons-io:commons-io:2.8.0'
+    testImplementation("org.aeonbits.owner:owner:1.0.12")
+    testImplementation 'org.projectlombok:lombok:1.18.22'
 }
 
 test {
     useJUnitPlatform()
+    systemProperties(System.getProperties())
 }

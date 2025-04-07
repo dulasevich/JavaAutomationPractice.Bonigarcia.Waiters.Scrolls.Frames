@@ -1,5 +1,7 @@
 package fundamentals;
 
+import configs.TestPropertiesConfig;
+import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,16 +20,15 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class SlowCalculatorTest {
-
-    private static final String BASE_URL = "https://bonigarcia.dev/selenium-webdriver-java";
     private WebDriver driver;
+    private final TestPropertiesConfig config = ConfigFactory.create(TestPropertiesConfig.class, System.getProperties());
 
     @BeforeEach
     void setUp() {
         driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.get(BASE_URL + "/index.html");
-        driver.navigate().to(BASE_URL + "/slow-calculator.html");
+        driver.get(config.getBaseUrl());
+        driver.findElement(By.xpath("//a[@href='slow-calculator.html']")).click();
     }
 
     @AfterEach
@@ -44,7 +45,7 @@ public class SlowCalculatorTest {
         delayInput.clear();
         delayInput.sendKeys("2");
         clickButtons(buttons);
-        new WebDriverWait(driver, Duration.ofSeconds(2))
+        new WebDriverWait(driver, Duration.ofSeconds(config.getShortTimeout()))
                 .until(ExpectedConditions.invisibilityOf(driver.findElement(By.xpath("//span[@id = 'spinner']"))));
         WebElement resultRow = driver.findElement(By.xpath("//div[@class='screen']"));
         Assertions.assertEquals(result, resultRow.getText(), "Result is incorrect");
